@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 async function getShares(groupBy, groupByFilter, meta, date, start, limit) {
     const endPoint = `https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/tqbr/securities.json?history.columns=SHORTNAME, SECID, OPEN, CLOSe, HIGH, LOW, MARKETPRICE2&group_by=${groupBy}&group_by_filter=${groupByFilter}&iss.meta=${meta}&start=${start}&limit=${limit}&date=${date}`;
@@ -23,8 +23,33 @@ function createShare(name, ticker, open, close, high, low, marketprice) {
     return { name, ticker, open, close, high, low, marketprice };
 }
 
-export default async function Stock() {
-    const [rows, setRows] = useState(await getShares("group", "stock_shares", "off", "2024-02.13", "0", "100"));
+export default function Stock() {
+    const [rows, setRows] = useState([]);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await fetchShares();
+                setRows(response);
+            } catch (error) {
+                console.error('Error fetching shares:', error);
+            }
+        }
+
+        fetchData();
+    }, []);
+
+    async function fetchShares() {
+        const endPoint = 'https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/tqbr/securities.json?history.columns=SHORTNAME,SECID,OPEN,CLOSE,HIGH,LOW,MARKETPRICE2&group_by=group&group_by_filter=stock_shares&iss.meta=off&start=0&limit=100&date=2024-02.13';
+        const response = await fetch(endPoint);
+        const data = await response.json();
+        const rows = data.history.data.map(item => createShare(item[0], item[1], item[2], item[3], item[4], item[5], item[6]));
+        return rows;
+    }
+
+    function createShare(name, ticker, open, close, high, low, marketprice) {
+        return { name, ticker, open, close, high, low, marketprice };
+    }
 
     return (
         <TableContainer component={Paper}>
@@ -62,3 +87,4 @@ export default async function Stock() {
         </TableContainer>
     );
 }
+
