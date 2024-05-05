@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,30 +7,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {useEffect, useState} from "react";
 
-async function getShares(groupBy, groupByFilter, meta, date, start, limit) {
-    const endPoint = `https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/tqbr/securities.json?history.columns=SHORTNAME, SECID, OPEN, CLOSe, HIGH, LOW, MARKETPRICE2&group_by=${groupBy}&group_by_filter=${groupByFilter}&iss.meta=${meta}&start=${start}&limit=${limit}&date=${date}`;
-    const response = (await fetch(endPoint)).json();
-    console.log(response);
-    const rows = response["history"]["data"].map(createShare(function (item) {
-        return createShare(item[0], item[1], item[2], item[3], item[4], item[5], item[6]);
-    }));
-    console.log(rows);
-    return rows;
-}
-
-function createShare(name, ticker, open, close, high, low, marketprice) {
-    return { name, ticker, open, close, high, low, marketprice };
-}
-
-export default function Stock() {
+export default function Stock({searchTerm}) {
     const [rows, setRows] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetchShares();
+                const response = await fetchShares("group", "stock_shares");
                 setRows(response);
             } catch (error) {
                 console.error('Error fetching shares:', error);
@@ -39,16 +24,31 @@ export default function Stock() {
         fetchData();
     }, []);
 
-    async function fetchShares() {
-        const endPoint = 'https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/tqbr/securities.json?history.columns=SHORTNAME,SECID,OPEN,CLOSE,HIGH,LOW,MARKETPRICE2&group_by=group&group_by_filter=stock_shares&iss.meta=off&start=0&limit=100&date=2024-02.13';
-        const response = await fetch(endPoint);
-        const data = await response.json();
-        const rows = data.history.data.map(item => createShare(item[0], item[1], item[2], item[3], item[4], item[5], item[6]));
-        return rows;
+    async function fetchShares(groupBy, groupByFilter) {
+        const endPoint = `https://iss.moex.com/iss/securities.json?engine=stock&market=shares&group_by=${groupBy}&group_by_filter=${groupByFilter}&q=${searchTerm}`;
+        const response = (await fetch(endPoint)).json();
+
+        const securities = response["securities"];
+
+        return securities["data"].map(async (item) => {
+            const ticker = item[securities["columns"].indexOf("secid")];
+            const shortname = item[securities["columns"].indexOf("shortname")];
+            const board = item[securities["columns"].indexOf("marketprice_boardid")];
+
+            const endPoint = `https://iss.moex.com/iss/engines/stock/markets/shares/boards/${board}/securities/${ticker}.json`
+            const marketData = (((await fetch(endPoint)).json()).then(r => r))["marketdata"];
+
+            console.log(marketData);
+            const columns = marketData["columns"];
+
+            return createShare(ticker, shortname, board,
+                marketData[columns.indexOf("OPEN")], marketData[columns.indexOf("LOW")],
+                marketData[columns.indexOf("HIGH")], marketData[columns.indexOf("LAST")]);
+        });
     }
 
-    function createShare(name, ticker, open, close, high, low, marketprice) {
-        return { name, ticker, open, close, high, low, marketprice };
+    function createShare(ticker, shortname, board, open, low, high, last) {
+        return {ticker, shortname, board, open, low, high, last};
     }
 
     return (
@@ -58,28 +58,28 @@ export default function Stock() {
                     <TableRow>
                         <TableCell>Name</TableCell>
                         <TableCell align="right">Ticker</TableCell>
-                        <TableCell align="right">Value</TableCell>
+                        <TableCell align="right">Board</TableCell>
                         <TableCell align="right">Open</TableCell>
-                        <TableCell align="right">High</TableCell>
                         <TableCell align="right">Low</TableCell>
-                        <TableCell align="right">Close</TableCell>
+                        <TableCell align="right">High</TableCell>
+                        <TableCell align="right">Last</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
                         <TableRow
-                            key={row.name}
+                            key={row.shortname}
                             sx={{'&:last-child td, &:last-child th': {border: 0}}}
                         >
                             <TableCell component="th" scope="row">
-                                {row.name}
+                                {row.shortname}
                             </TableCell>
                             <TableCell align="right">{row.ticker}</TableCell>
-                            <TableCell align="right">{row.marketprice}</TableCell>
+                            <TableCell align="right">{row.board}</TableCell>
                             <TableCell align="right">{row.open}</TableCell>
-                            <TableCell align="right">{row.high}</TableCell>
                             <TableCell align="right">{row.low}</TableCell>
-                            <TableCell align="right">{row.close}</TableCell>
+                            <TableCell align="right">{row.high}</TableCell>
+                            <TableCell align="right">{row.last}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
