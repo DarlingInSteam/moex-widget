@@ -2,23 +2,28 @@ import './App.css';
 import "@mui/material/Button";
 import SearchBar from "./components/SearchBar";
 import Stock from "./components/Stock";
-import {useState} from "react";
+import React, {useState} from "react";
+import {createBrowserRouter, Router, RouterProvider} from "react-router-dom";
+import SearchPage from "./components/SearchPage";
+import CandlesPage from "./components/CandlesPage";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <SearchPage/>,
+    },
+    {
+        path: "/:ticker",
+        element: <CandlesPage/>
+    }
+])
 
 function App() {
-    const [searchTerm, setSearchTerm] = useState("");
-
-    const handleChange = (searchTerm) => {
-        setSearchTerm(searchTerm);
-    };
-
     return (
         <div className="App">
-            <header className="App-header">
-                <SearchBar onChange={handleChange}/>
-            </header>
-            <div>
-                <Stock searchTerm={searchTerm}/>
-            </div>
+            <React.StrictMode>
+                <RouterProvider router={router}/>
+            </React.StrictMode>
         </div>
     );
 }

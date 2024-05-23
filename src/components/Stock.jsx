@@ -6,6 +6,7 @@ import {
 import {useEffect, useState} from "react";
 import {LinearProgress} from "@mui/material";
 import {DataGrid} from "@mui/x-data-grid";
+import {useNavigate, useNavigation} from "react-router-dom";
 
 const FETCH_INTERVAL = 60 * 1000;
 
@@ -61,6 +62,7 @@ const columns = [
 ]
 
 export default function Stock({searchTerm}) {
+    const navigate = useNavigate();
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -101,6 +103,9 @@ export default function Stock({searchTerm}) {
             <DataGrid
                 rows={rows}
                 columns={columns}
+                onRowClick={(row) => {
+                    navigate(`./${row.row.ticker}`)
+                }}
                 initialState={{
                     pagination: {
                         paginationModel: {
