@@ -2,6 +2,18 @@
     text-align: center;
 }
 
+.search-page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-stock {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
 .App-logo {
     height: 40vmin;
     pointer-events: none;

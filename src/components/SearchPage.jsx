@@ -10,13 +10,13 @@ export default function SearchPage(props) {
     };
 
     return (
-        <dvi>
+        <div className="search-page">
             <header className="App-header">
                 <SearchBar onChange={handleChange}/>
             </header>
-            <div>
+            <div className="search-stock">
                 <Stock searchTerm={searchTerm}/>
             </div>
-        </dvi>
+        </div>
     )
 }

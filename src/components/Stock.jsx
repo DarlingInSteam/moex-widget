@@ -98,9 +98,10 @@ export default function Stock({searchTerm}) {
     }, [searchTerm])
 
     return (
-        <Stack>
+        <Stack height={1}>
             {loading && <LinearProgress/>}
             <DataGrid
+                autoHeight={true}
                 rows={rows}
                 columns={columns}
                 onRowClick={(row) => {
