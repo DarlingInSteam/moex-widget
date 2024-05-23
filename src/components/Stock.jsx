@@ -102,7 +102,7 @@ export default function Stock({searchTerm}) {
                 rows={rows}
                 columns={columns}
                 onRowClick={(row) => {
-                    navigate(`./${row.row.ticker}`)
+                    navigate(`./share/${row.row.ticker}`)
                 }}
                 initialState={{
                     pagination: {

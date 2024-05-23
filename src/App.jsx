@@ -11,7 +11,7 @@ const router = createBrowserRouter([
         element: <SearchPage/>,
     },
     {
-        path: "/:ticker",
+        path: "/share/:ticker",
         element: <CandlesPage/>
     }
 ])
