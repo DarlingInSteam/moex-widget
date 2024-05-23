@@ -1,11 +1,11 @@
 import './App.css';
 import "@mui/material/Button";
 import React from "react";
-import {createBrowserRouter, Router, RouterProvider} from "react-router-dom";
+import {createHashRouter, RouterProvider} from "react-router-dom";
 import SearchPage from "./components/SearchPage";
 import CandlesPage from "./components/CandlesPage";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
         path: "/",
         element: <SearchPage/>,
