@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/moex-widget/static/css/main.d7d02cf9.css",
+    "main.js": "/moex-widget/static/js/main.bb7c3038.js",
+    "static/js/453.0b173536.chunk.js": "/moex-widget/static/js/453.0b173536.chunk.js",
+    "static/js/312.66bea963.chunk.js": "/moex-widget/static/js/312.66bea963.chunk.js",
+    "index.html": "/moex-widget/index.html",
+    "main.d7d02cf9.css.map": "/moex-widget/static/css/main.d7d02cf9.css.map",
+    "main.bb7c3038.js.map": "/moex-widget/static/js/main.bb7c3038.js.map",
+    "453.0b173536.chunk.js.map": "/moex-widget/static/js/453.0b173536.chunk.js.map",
+    "312.66bea963.chunk.js.map": "/moex-widget/static/js/312.66bea963.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d7d02cf9.css",
+    "static/js/main.bb7c3038.js"
+  ]
+}
