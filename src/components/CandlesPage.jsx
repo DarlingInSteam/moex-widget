@@ -56,7 +56,7 @@ export default function CandlesPage() {
                     <ArrowBackIcon/>
                 </IconButton>
                 <div className="candles-chart">
-                    <Chart series={[{data: candles}]} options={options} type="candlestick"/>
+                    <Chart series={[{data: candles}]} options={options} type="candlestick" height="100%"/>
                 </div>
             </div>
         </div>
