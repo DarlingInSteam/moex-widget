@@ -1,12 +1,9 @@
 import * as React from 'react';
-import {Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@mui/material';
-import {
-    TableVirtuoso,
-} from "react-virtuoso"
+import {Stack} from '@mui/material';
 import {useEffect, useState} from "react";
 import {LinearProgress} from "@mui/material";
 import {DataGrid} from "@mui/x-data-grid";
-import {useNavigate, useNavigation} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const FETCH_INTERVAL = 60 * 1000;
 

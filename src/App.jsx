@@ -1,8 +1,6 @@
 import './App.css';
 import "@mui/material/Button";
-import SearchBar from "./components/SearchBar";
-import Stock from "./components/Stock";
-import React, {useState} from "react";
+import React from "react";
 import {createBrowserRouter, Router, RouterProvider} from "react-router-dom";
 import SearchPage from "./components/SearchPage";
 import CandlesPage from "./components/CandlesPage";

@@ -1,7 +1,5 @@
-import {Container, InputAdornment, Stack, TextField} from "@mui/material";
-import {useState} from "react";
+import {InputAdornment, TextField} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import Stock from "./Stock";
 
 export default function SearchBar({onChange}) {
     const handleChange = (event) => {
